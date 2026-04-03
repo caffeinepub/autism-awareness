@@ -12,7 +12,6 @@ import About from "./pages/About";
 import Awareness from "./pages/Awareness";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
-import Infographics from "./pages/Infographics";
 import Quiz from "./pages/Quiz";
 import Technology from "./pages/Technology";
 
@@ -44,11 +43,6 @@ const awarenessRoute = createRoute({
   path: "/awareness",
   component: Awareness,
 });
-const infographicsRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/infographics",
-  component: Infographics,
-});
 const quizRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/quiz",
@@ -69,7 +63,6 @@ const routeTree = rootRoute.addChildren([
   indexRoute,
   aboutRoute,
   awarenessRoute,
-  infographicsRoute,
   quizRoute,
   technologyRoute,
   contactRoute,

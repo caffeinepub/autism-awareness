@@ -56,49 +56,12 @@ const questions = [
     correct: 1,
   },
   {
-    question:
-      "Which famous historical figure is believed by some researchers to have been autistic?",
-    options: [
-      "Napoleon Bonaparte",
-      "Albert Einstein",
-      "Abraham Lincoln",
-      "Julius Caesar",
-    ],
-    correct: 1,
-  },
-  {
     question: "What is Augmentative and Alternative Communication (AAC)?",
     options: [
       "A type of autism medication",
       "Communication methods beyond speech such as devices and symbols",
       "A therapy exercise program",
       "An autism diagnosis test",
-    ],
-    correct: 1,
-  },
-  {
-    question:
-      "What percentage of autistic adults are unemployed or underemployed?",
-    options: ["Around 20%", "Around 40%", "Around 60%", "Around 80%"],
-    correct: 3,
-  },
-  {
-    question: "Which area do many autistic individuals tend to excel in?",
-    options: [
-      "All autistic people have the same strengths",
-      "Pattern recognition and detail-oriented thinking",
-      "Always social interactions",
-      "Physical sports exclusively",
-    ],
-    correct: 1,
-  },
-  {
-    question: "What is 'neurodiversity'?",
-    options: [
-      "A medical treatment for autism",
-      "The idea that neurological differences are natural human variation",
-      "A type of special education program",
-      "A genetic testing method",
     ],
     correct: 1,
   },
@@ -116,7 +79,7 @@ export default function Quiz() {
   );
   const [submitted, setSubmitted] = useState(false);
 
-  const progress = (currentQ / questions.length) * 100;
+  const progress = ((currentQ + (submitted ? 1 : 0)) / questions.length) * 100;
 
   const handleSelect = (idx: number) => {
     if (submitted) return;
@@ -141,9 +104,9 @@ export default function Quiz() {
         (a, i) => a === questions[i].correct,
       ).length;
       try {
-        await actor?.submitQuizAttempt(
-          BigInt(finalScore),
+        await actor?.submitQuizResult(
           BigInt(questions.length),
+          BigInt(finalScore),
         );
       } catch (_) {
         // Silently ignore
@@ -161,28 +124,28 @@ export default function Quiz() {
   };
 
   const getResultMessage = (s: number) => {
-    if (s >= 9)
+    if (s >= 5)
       return {
         title: "Autism Expert!",
         emoji: "🏆",
         msg: "Outstanding! You have an excellent understanding of autism. Your knowledge can make a real difference!",
       };
-    if (s >= 7)
+    if (s >= 4)
       return {
         title: "Great Knowledge!",
         emoji: "⭐",
-        msg: "You know a lot about autism! A little more learning and you'll be an expert advocate.",
+        msg: "You know a lot about autism! Keep exploring to deepen your understanding.",
       };
-    if (s >= 5)
+    if (s >= 2)
       return {
         title: "Good Start!",
         emoji: "👍",
-        msg: "You have a solid foundation. Keep exploring to deepen your understanding of autism.",
+        msg: "You have a solid foundation. Keep learning to become an autism advocate.",
       };
     return {
       title: "Keep Learning!",
       emoji: "📚",
-      msg: "Every question you get wrong is an opportunity to learn. Autism awareness starts with curiosity!",
+      msg: "Every question is an opportunity to learn. Autism awareness starts with curiosity!",
     };
   };
 
@@ -193,24 +156,25 @@ export default function Quiz() {
 
   return (
     <div>
-      <section className="hero-gradient py-16 md:py-20">
-        <div className="container mx-auto px-4 sm:px-6 text-center">
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-white border-b border-border">
+        <div className="container mx-auto px-4 sm:px-6 py-16 md:py-20">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h1 className="font-display font-black text-4xl md:text-5xl text-foreground mb-4">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-foreground mb-4 tracking-tight">
               Autism Awareness Quiz
             </h1>
-            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              Test your knowledge with 10 questions about autism. Learn as you
+            <p className="text-muted-foreground text-lg max-w-xl">
+              Test your knowledge with 6 questions about autism. Learn as you
               play!
             </p>
           </motion.div>
         </div>
       </section>
 
-      <section className="py-16 bg-white">
+      <section className="py-16 cool-band min-h-[60vh]">
         <div className="container mx-auto px-4 sm:px-6 max-w-2xl">
           <AnimatePresence mode="wait">
             {state === "intro" && (
@@ -225,16 +189,15 @@ export default function Quiz() {
                 <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
                   <Trophy className="w-10 h-10 text-primary" />
                 </div>
-                <h2 className="font-display font-bold text-2xl mb-3">
+                <h2 className="font-extrabold text-2xl mb-2">
                   Ready to Test Your Knowledge?
                 </h2>
                 <p className="text-muted-foreground mb-8">
-                  10 questions &middot; Multiple choice &middot; Educational
-                  &amp; fun
+                  6 questions · Multiple choice · Educational &amp; fun
                 </p>
                 <Button
                   size="lg"
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-10"
+                  className="bg-primary hover:bg-primary/90 text-white rounded-full px-10 font-semibold"
                   onClick={() => setState("playing")}
                   data-ocid="quiz.primary_button"
                 >
@@ -264,14 +227,16 @@ export default function Quiz() {
                     data-ocid="quiz.loading_state"
                   />
                 </div>
-                <Card className="mb-6">
+
+                <Card className="mb-5 border-border shadow-card">
                   <CardContent className="p-6">
-                    <h2 className="font-display font-bold text-xl text-foreground">
+                    <h2 className="font-bold text-lg text-foreground">
                       {questions[currentQ].question}
                     </h2>
                   </CardContent>
                 </Card>
-                <div className="space-y-3 mb-8">
+
+                <div className="space-y-3 mb-6">
                   {questions[currentQ].options.map((opt, i) => {
                     const isCorrect = i === questions[currentQ].correct;
                     const isSelected = i === selected;
@@ -299,7 +264,7 @@ export default function Quiz() {
                         data-ocid={`quiz.radio.${i + 1}`}
                       >
                         <div className="flex items-center gap-3">
-                          <span className="w-6 h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center text-xs font-bold">
+                          <span className="w-7 h-7 rounded-full border-2 flex-shrink-0 flex items-center justify-center text-xs font-bold">
                             {submitted && isCorrect ? (
                               <CheckCircle className="w-5 h-5 text-green-500" />
                             ) : submitted && isSelected && !isCorrect ? (
@@ -314,10 +279,11 @@ export default function Quiz() {
                     );
                   })}
                 </div>
+
                 <Button
                   onClick={handleNext}
                   disabled={selected === null || submitted}
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl"
+                  className="w-full bg-primary hover:bg-primary/90 text-white rounded-xl font-semibold"
                   data-ocid="quiz.submit_button"
                 >
                   {currentQ === questions.length - 1
@@ -333,41 +299,45 @@ export default function Quiz() {
                 key="finished"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="text-center"
+                className="text-center bg-white rounded-2xl p-8 shadow-card border border-border"
                 data-ocid="quiz.success_state"
               >
                 <div className="text-5xl mb-4">{result.emoji}</div>
-                <h2 className="font-display font-black text-3xl mb-2">
-                  {result.title}
-                </h2>
-                <p className="font-display text-6xl font-black text-primary mb-2">
+                <h2 className="font-extrabold text-2xl mb-2">{result.title}</h2>
+                <p className="font-extrabold text-5xl text-primary mb-1">
                   {finalScore}
-                  <span className="text-2xl text-muted-foreground">
+                  <span className="text-xl text-muted-foreground">
                     /{questions.length}
                   </span>
                 </p>
                 <p className="text-muted-foreground mb-8 max-w-md mx-auto">
                   {result.msg}
                 </p>
-                <div className="grid grid-cols-5 gap-2 max-w-sm mx-auto mb-8">
+
+                <div className="grid grid-cols-3 gap-3 max-w-xs mx-auto mb-8">
                   {questions.map((q, i) => (
                     <div
                       key={q.question}
-                      className={`flex items-center justify-center gap-1 text-xs p-2 rounded-lg ${answers[i] === q.correct ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}
+                      className={`flex items-center justify-center gap-1 text-xs p-2.5 rounded-xl ${
+                        answers[i] === q.correct
+                          ? "bg-green-50 text-green-700 border border-green-200"
+                          : "bg-red-50 text-red-700 border border-red-200"
+                      }`}
                     >
                       {answers[i] === q.correct ? (
                         <CheckCircle className="w-4 h-4" />
                       ) : (
                         <XCircle className="w-4 h-4" />
                       )}
-                      <span>Q{i + 1}</span>
+                      <span className="font-semibold">Q{i + 1}</span>
                     </div>
                   ))}
                 </div>
+
                 <Button
                   size="lg"
                   variant="outline"
-                  className="rounded-full px-8 border-primary text-primary hover:bg-primary/10"
+                  className="rounded-full px-8 border-primary text-primary hover:bg-primary/10 font-semibold"
                   onClick={handleRestart}
                   data-ocid="quiz.secondary_button"
                 >

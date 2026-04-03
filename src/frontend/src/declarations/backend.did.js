@@ -15,37 +15,27 @@ export const ContactSubmission = IDL.Record({
   'message' : IDL.Text,
   'timestamp' : Time,
 });
-export const QuizQuestion = IDL.Record({
-  'question' : IDL.Text,
-  'correctAnswerIndex' : IDL.Nat,
-  'options' : IDL.Vec(IDL.Text),
-});
-export const QuizAttempt = IDL.Record({
-  'score' : IDL.Nat,
+export const QuizResult = IDL.Record({
   'totalQuestions' : IDL.Nat,
+  'correctAnswers' : IDL.Nat,
   'timestamp' : Time,
+});
+export const QuizStats = IDL.Record({
+  'totalCorrect' : IDL.Nat,
+  'totalQuestions' : IDL.Nat,
+  'totalAttempts' : IDL.Nat,
 });
 
 export const idlService = IDL.Service({
-  'addQuizQuestion' : IDL.Func([IDL.Text, IDL.Vec(IDL.Text), IDL.Nat], [], []),
   'getAllContactSubmissions' : IDL.Func(
       [],
       [IDL.Vec(ContactSubmission)],
       ['query'],
     ),
-  'getQuizQuestions' : IDL.Func([], [IDL.Vec(QuizQuestion)], ['query']),
-  'getTopQuizScores' : IDL.Func(
-      [],
-      [IDL.Vec(IDL.Tuple(IDL.Principal, QuizAttempt))],
-      ['query'],
-    ),
-  'getUserQuizAttempts' : IDL.Func(
-      [IDL.Principal],
-      [IDL.Vec(QuizAttempt)],
-      ['query'],
-    ),
+  'getAllQuizResults' : IDL.Func([], [IDL.Vec(QuizResult)], ['query']),
+  'getQuizStats' : IDL.Func([], [QuizStats], ['query']),
   'submitContactForm' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
-  'submitQuizAttempt' : IDL.Func([IDL.Nat, IDL.Nat], [], []),
+  'submitQuizResult' : IDL.Func([IDL.Nat, IDL.Nat], [], []),
 });
 
 export const idlInitArgs = [];
@@ -58,41 +48,27 @@ export const idlFactory = ({ IDL }) => {
     'message' : IDL.Text,
     'timestamp' : Time,
   });
-  const QuizQuestion = IDL.Record({
-    'question' : IDL.Text,
-    'correctAnswerIndex' : IDL.Nat,
-    'options' : IDL.Vec(IDL.Text),
-  });
-  const QuizAttempt = IDL.Record({
-    'score' : IDL.Nat,
+  const QuizResult = IDL.Record({
     'totalQuestions' : IDL.Nat,
+    'correctAnswers' : IDL.Nat,
     'timestamp' : Time,
+  });
+  const QuizStats = IDL.Record({
+    'totalCorrect' : IDL.Nat,
+    'totalQuestions' : IDL.Nat,
+    'totalAttempts' : IDL.Nat,
   });
   
   return IDL.Service({
-    'addQuizQuestion' : IDL.Func(
-        [IDL.Text, IDL.Vec(IDL.Text), IDL.Nat],
-        [],
-        [],
-      ),
     'getAllContactSubmissions' : IDL.Func(
         [],
         [IDL.Vec(ContactSubmission)],
         ['query'],
       ),
-    'getQuizQuestions' : IDL.Func([], [IDL.Vec(QuizQuestion)], ['query']),
-    'getTopQuizScores' : IDL.Func(
-        [],
-        [IDL.Vec(IDL.Tuple(IDL.Principal, QuizAttempt))],
-        ['query'],
-      ),
-    'getUserQuizAttempts' : IDL.Func(
-        [IDL.Principal],
-        [IDL.Vec(QuizAttempt)],
-        ['query'],
-      ),
+    'getAllQuizResults' : IDL.Func([], [IDL.Vec(QuizResult)], ['query']),
+    'getQuizStats' : IDL.Func([], [QuizStats], ['query']),
     'submitContactForm' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
-    'submitQuizAttempt' : IDL.Func([IDL.Nat, IDL.Nat], [], []),
+    'submitQuizResult' : IDL.Func([IDL.Nat, IDL.Nat], [], []),
   });
 };
 

@@ -16,25 +16,23 @@ export interface ContactSubmission {
   'message' : string,
   'timestamp' : Time,
 }
-export interface QuizAttempt {
-  'score' : bigint,
+export interface QuizResult {
   'totalQuestions' : bigint,
+  'correctAnswers' : bigint,
   'timestamp' : Time,
 }
-export interface QuizQuestion {
-  'question' : string,
-  'correctAnswerIndex' : bigint,
-  'options' : Array<string>,
+export interface QuizStats {
+  'totalCorrect' : bigint,
+  'totalQuestions' : bigint,
+  'totalAttempts' : bigint,
 }
 export type Time = bigint;
 export interface _SERVICE {
-  'addQuizQuestion' : ActorMethod<[string, Array<string>, bigint], undefined>,
   'getAllContactSubmissions' : ActorMethod<[], Array<ContactSubmission>>,
-  'getQuizQuestions' : ActorMethod<[], Array<QuizQuestion>>,
-  'getTopQuizScores' : ActorMethod<[], Array<[Principal, QuizAttempt]>>,
-  'getUserQuizAttempts' : ActorMethod<[Principal], Array<QuizAttempt>>,
+  'getAllQuizResults' : ActorMethod<[], Array<QuizResult>>,
+  'getQuizStats' : ActorMethod<[], QuizStats>,
   'submitContactForm' : ActorMethod<[string, string, string], undefined>,
-  'submitQuizAttempt' : ActorMethod<[bigint, bigint], undefined>,
+  'submitQuizResult' : ActorMethod<[bigint, bigint], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

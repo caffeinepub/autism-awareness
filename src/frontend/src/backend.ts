@@ -89,17 +89,17 @@ export class ExternalBlob {
         return this;
     }
 }
-export type Time = bigint;
-export interface QuizAttempt {
-    score: bigint;
+export interface QuizResult {
     totalQuestions: bigint;
+    correctAnswers: bigint;
     timestamp: Time;
 }
-export interface QuizQuestion {
-    question: string;
-    correctAnswerIndex: bigint;
-    options: Array<string>;
+export interface QuizStats {
+    totalCorrect: bigint;
+    totalQuestions: bigint;
+    totalAttempts: bigint;
 }
+export type Time = bigint;
 export interface ContactSubmission {
     name: string;
     email: string;
@@ -107,30 +107,14 @@ export interface ContactSubmission {
     timestamp: Time;
 }
 export interface backendInterface {
-    addQuizQuestion(question: string, options: Array<string>, correctAnswerIndex: bigint): Promise<void>;
     getAllContactSubmissions(): Promise<Array<ContactSubmission>>;
-    getQuizQuestions(): Promise<Array<QuizQuestion>>;
-    getTopQuizScores(): Promise<Array<[Principal, QuizAttempt]>>;
-    getUserQuizAttempts(user: Principal): Promise<Array<QuizAttempt>>;
+    getAllQuizResults(): Promise<Array<QuizResult>>;
+    getQuizStats(): Promise<QuizStats>;
     submitContactForm(name: string, email: string, message: string): Promise<void>;
-    submitQuizAttempt(score: bigint, totalQuestions: bigint): Promise<void>;
+    submitQuizResult(totalQuestions: bigint, correctAnswers: bigint): Promise<void>;
 }
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
-    async addQuizQuestion(arg0: string, arg1: Array<string>, arg2: bigint): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.addQuizQuestion(arg0, arg1, arg2);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.addQuizQuestion(arg0, arg1, arg2);
-            return result;
-        }
-    }
     async getAllContactSubmissions(): Promise<Array<ContactSubmission>> {
         if (this.processError) {
             try {
@@ -145,45 +129,31 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async getQuizQuestions(): Promise<Array<QuizQuestion>> {
+    async getAllQuizResults(): Promise<Array<QuizResult>> {
         if (this.processError) {
             try {
-                const result = await this.actor.getQuizQuestions();
+                const result = await this.actor.getAllQuizResults();
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.getQuizQuestions();
+            const result = await this.actor.getAllQuizResults();
             return result;
         }
     }
-    async getTopQuizScores(): Promise<Array<[Principal, QuizAttempt]>> {
+    async getQuizStats(): Promise<QuizStats> {
         if (this.processError) {
             try {
-                const result = await this.actor.getTopQuizScores();
+                const result = await this.actor.getQuizStats();
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.getTopQuizScores();
-            return result;
-        }
-    }
-    async getUserQuizAttempts(arg0: Principal): Promise<Array<QuizAttempt>> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getUserQuizAttempts(arg0);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getUserQuizAttempts(arg0);
+            const result = await this.actor.getQuizStats();
             return result;
         }
     }
@@ -201,17 +171,17 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async submitQuizAttempt(arg0: bigint, arg1: bigint): Promise<void> {
+    async submitQuizResult(arg0: bigint, arg1: bigint): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.submitQuizAttempt(arg0, arg1);
+                const result = await this.actor.submitQuizResult(arg0, arg1);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.submitQuizAttempt(arg0, arg1);
+            const result = await this.actor.submitQuizResult(arg0, arg1);
             return result;
         }
     }

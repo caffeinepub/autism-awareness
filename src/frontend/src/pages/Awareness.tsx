@@ -2,12 +2,27 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Globe, Heart, Lightbulb, Star, Users } from "lucide-react";
 import { motion } from "motion/react";
 
-const globalStats = [
-  { label: "People with autism worldwide", value: "~75 million", pct: 80 },
-  { label: "Diagnosed before age 4", value: "Only 40%", pct: 40 },
-  { label: "Countries with autism strategy", value: "Less than 50%", pct: 45 },
-  { label: "Autistic adults employed", value: "Only 20%", pct: 20 },
-  { label: "Families impacted globally", value: "1 in 3", pct: 33 },
+const statCards = [
+  {
+    value: "~75 million",
+    label: "People with autism worldwide",
+    color: "card-blue",
+  },
+  {
+    value: "1 in 44",
+    label: "Children diagnosed with ASD in the US",
+    color: "card-lavender",
+  },
+  {
+    value: "80%",
+    label: "Unemployment rate among autistic adults",
+    color: "card-mint",
+  },
+  {
+    value: "April 2",
+    label: "World Autism Awareness Day (est. 2007)",
+    color: "card-blue",
+  },
 ];
 
 const keyFacts = [
@@ -29,7 +44,7 @@ const keyFacts = [
   },
   {
     icon: Star,
-    text: "Autistic individuals have a 7x higher risk of anxiety and depression without support.",
+    text: "Autistic individuals have a 7× higher risk of anxiety and depression without support.",
   },
   {
     icon: Calendar,
@@ -37,19 +52,36 @@ const keyFacts = [
   },
 ];
 
+function PuzzlePiece({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      viewBox="0 0 200 200"
+      fill="currentColor"
+    >
+      <path d="M80 20a20 20 0 0 1 40 0v10h30a10 10 0 0 1 10 10v30h10a20 20 0 0 1 0 40h-10v30a10 10 0 0 1-10 10h-30v10a20 20 0 0 1-40 0v-10H50a10 10 0 0 1-10-10v-30H30a20 20 0 0 1 0-40h10V40a10 10 0 0 1 10-10h30V20z" />
+    </svg>
+  );
+}
+
 export default function Awareness() {
   return (
     <div>
-      <section className="hero-gradient py-16 md:py-24">
-        <div className="container mx-auto px-4 sm:px-6 text-center">
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-white border-b border-border">
+        <div className="absolute inset-0 pointer-events-none">
+          <PuzzlePiece className="absolute -right-12 -top-8 w-64 h-64 text-secondary opacity-[0.05]" />
+        </div>
+        <div className="container mx-auto px-4 sm:px-6 py-16 md:py-20">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h1 className="font-display font-black text-4xl md:text-5xl text-foreground mb-4">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-foreground mb-4 tracking-tight">
               Why Awareness Matters
             </h1>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            <p className="text-muted-foreground text-lg max-w-xl">
               Understanding autism is the first step toward building a more
               inclusive and supportive world.
             </p>
@@ -57,22 +89,23 @@ export default function Awareness() {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 max-w-4xl">
+      {/* Intro */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4 sm:px-6 max-w-3xl">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="font-display font-bold text-3xl mb-6">
+            <h2 className="font-extrabold text-2xl sm:text-3xl mb-5">
               The Importance of Autism Awareness
             </h2>
             <div className="space-y-4 text-muted-foreground leading-relaxed">
               <p>
                 Autism awareness goes beyond simply knowing what autism is. It
                 means understanding the daily experiences of autistic
-                individuals and their families &mdash; the challenges they face
-                in accessing education, employment, healthcare, and social
+                individuals and their families — the challenges they face in
+                accessing education, employment, healthcare, and social
                 inclusion.
               </p>
               <p>
@@ -95,89 +128,46 @@ export default function Awareness() {
         </div>
       </section>
 
-      <section className="cool-band py-20">
+      {/* Stat Cards */}
+      <section className="cool-band py-16">
         <div className="container mx-auto px-4 sm:px-6">
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="font-display font-bold text-3xl md:text-4xl text-center mb-12"
+            className="font-extrabold text-2xl sm:text-3xl text-center mb-10 uppercase tracking-wide"
           >
-            Global Statistics
+            Key Facts at a Glance
           </motion.h2>
-          <div className="max-w-3xl mx-auto space-y-6">
-            {globalStats.map((stat, i) => (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
+            {statCards.map((stat, i) => (
               <motion.div
                 key={stat.label}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="font-medium text-foreground">
-                    {stat.label}
-                  </span>
-                  <span className="font-bold text-primary">{stat.value}</span>
-                </div>
-                <div className="h-3 bg-white rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full rounded-full bg-gradient-to-r from-primary to-secondary"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${stat.pct}%` }}
-                    viewport={{ once: true }}
-                    transition={{
-                      duration: 1.2,
-                      delay: i * 0.1,
-                      ease: "easeOut",
-                    }}
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4 sm:px-6">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="font-display font-bold text-3xl md:text-4xl text-center mb-12"
-          >
-            Key Facts
-          </motion.h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {keyFacts.map((fact, i) => (
-              <motion.div
-                key={fact.text}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                data-ocid={`facts.item.${i + 1}`}
+                data-ocid={`stats.item.${i + 1}`}
               >
-                <Card className="h-full hover:shadow-card transition-shadow">
-                  <CardContent className="p-6 flex gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center flex-shrink-0">
-                      <fact.icon className="w-5 h-5 text-secondary" />
-                    </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {fact.text}
-                    </p>
-                  </CardContent>
-                </Card>
+                <div
+                  className={`${stat.color} relative rounded-2xl p-6 text-center overflow-hidden shadow-card`}
+                >
+                  <PuzzlePiece className="absolute -bottom-4 -right-4 w-20 h-20 text-white opacity-25 pointer-events-none" />
+                  <p className="font-extrabold text-2xl text-foreground mb-2">
+                    {stat.value}
+                  </p>
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="warm-band py-20">
+      {/* World Autism Awareness Day */}
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4 sm:px-6 max-w-4xl">
-          <div className="grid md:grid-cols-2 gap-10 items-center">
+          <div className="grid md:grid-cols-2 gap-10 items-start">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -185,7 +175,7 @@ export default function Awareness() {
             >
               <div className="flex items-center gap-3 mb-4">
                 <Calendar className="w-6 h-6 text-secondary" />
-                <h2 className="font-display font-bold text-3xl">
+                <h2 className="font-extrabold text-2xl">
                   World Autism Awareness Day
                 </h2>
               </div>
@@ -195,10 +185,9 @@ export default function Awareness() {
                 and inclusion of autistic individuals.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                Each year, landmarks worldwide are lit up in blue to show
-                support. Organizations host educational events, walks, and
-                advocacy campaigns throughout April &mdash; Autism Awareness
-                Month.
+                Each year, landmarks worldwide are lit up in blue. Organizations
+                host educational events, walks, and advocacy campaigns
+                throughout April — Autism Awareness Month.
               </p>
             </motion.div>
             <motion.div
@@ -206,8 +195,8 @@ export default function Awareness() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <div className="bg-white rounded-2xl p-8 shadow-card">
-                <h3 className="font-display font-bold text-xl mb-4 text-secondary">
+              <div className="bg-muted rounded-2xl p-7 border border-border">
+                <h3 className="font-bold text-lg mb-5 text-secondary">
                   Awareness vs. Acceptance
                 </h3>
                 <div className="space-y-4">
@@ -236,52 +225,40 @@ export default function Awareness() {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 max-w-3xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
+      {/* Key Facts Grid */}
+      <section className="warm-band py-16">
+        <div className="container mx-auto px-4 sm:px-6">
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            className="font-extrabold text-2xl sm:text-3xl text-center mb-10"
           >
-            <h2 className="font-display font-bold text-3xl md:text-4xl mb-6 text-center">
-              Impact on Families
-            </h2>
-            <p className="text-muted-foreground leading-relaxed text-center mb-8">
-              Autism affects not just the individual but the entire family unit
-              &mdash; parents, siblings, and extended family.
-            </p>
-            <div className="grid sm:grid-cols-2 gap-4">
-              {[
-                {
-                  title: "Emotional Toll",
-                  desc: "Parents often experience grief, stress, and burnout. Support groups and respite care are vital resources.",
-                },
-                {
-                  title: "Financial Burden",
-                  desc: "Families spend an average of $60,000+ annually on autism-related expenses including therapy and care.",
-                },
-                {
-                  title: "Sibling Experience",
-                  desc: "Siblings may feel overlooked or take on caregiver roles. Family counseling helps balance these dynamics.",
-                },
-                {
-                  title: "Community Support",
-                  desc: "Strong community networks reduce isolation and provide practical help for day-to-day challenges.",
-                },
-              ].map((item, i) => (
-                <Card
-                  key={item.title}
-                  className="hover:shadow-card transition-shadow"
-                  data-ocid={`impact.item.${i + 1}`}
-                >
-                  <CardContent className="p-5">
-                    <h4 className="font-semibold mb-2">{item.title}</h4>
-                    <p className="text-muted-foreground text-sm">{item.desc}</p>
+            Key Facts
+          </motion.h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
+            {keyFacts.map((fact, i) => (
+              <motion.div
+                key={fact.text}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                data-ocid={`facts.item.${i + 1}`}
+              >
+                <Card className="h-full hover:shadow-card transition-shadow border-border">
+                  <CardContent className="p-5 flex gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center flex-shrink-0">
+                      <fact.icon className="w-5 h-5 text-secondary" />
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {fact.text}
+                    </p>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
-          </motion.div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
     </div>

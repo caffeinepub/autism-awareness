@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -6,9 +5,8 @@ import { useState } from "react";
 
 const navLinks = [
   { label: "Home", to: "/" },
-  { label: "About", to: "/about" },
+  { label: "About Autism", to: "/about" },
   { label: "Awareness", to: "/awareness" },
-  { label: "Infographics", to: "/infographics" },
   { label: "Quiz", to: "/quiz" },
   { label: "Technology", to: "/technology" },
   { label: "Contact", to: "/contact" },
@@ -18,13 +16,13 @@ function PuzzleIcon({ className }: { className?: string }) {
   return (
     <svg
       className={className}
-      viewBox="0 0 32 32"
+      viewBox="0 0 40 40"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
       aria-label="Puzzle piece logo"
     >
-      <path d="M12 4a2 2 0 0 1 4 0v1h5a1 1 0 0 1 1 1v5h1a2 2 0 0 1 0 4h-1v5a1 1 0 0 1-1 1h-5v1a2 2 0 0 1-4 0v-1H6a1 1 0 0 1-1-1v-5H4a2 2 0 0 1 0-4h1V6a1 1 0 0 1 1-1h5V4z" />
+      <path d="M16 6a4 4 0 0 1 8 0v2h6a2 2 0 0 1 2 2v6h2a4 4 0 0 1 0 8h-2v6a2 2 0 0 1-2 2h-6v2a4 4 0 0 1-8 0v-2h-6a2 2 0 0 1-2-2v-6H6a4 4 0 0 1 0-8h2V10a2 2 0 0 1 2-2h6V6z" />
     </svg>
   );
 }
@@ -41,28 +39,34 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-white border-b border-border shadow-xs">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2" data-ocid="nav.link">
+          {/* Brand */}
+          <Link
+            to="/"
+            className="flex items-center gap-2.5"
+            data-ocid="nav.link"
+          >
             <PuzzleIcon className="w-8 h-8 text-primary" />
             <div className="leading-tight">
-              <p className="font-display font-bold text-base text-foreground">
-                Autism
+              <p className="text-xs font-bold uppercase tracking-[0.15em] text-muted-foreground">
+                Understanding
               </p>
-              <p className="text-xs font-semibold text-muted-foreground tracking-widest uppercase">
-                Awareness Hub
+              <p className="font-bold text-base text-foreground tracking-tight leading-none">
+                AUTISM
               </p>
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1">
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-0.5">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
                 data-ocid="nav.link"
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
                   isActive(link.to)
-                    ? "text-primary bg-primary/10"
-                    : "text-foreground hover:text-primary hover:bg-primary/5"
+                    ? "text-primary bg-primary/10 font-semibold"
+                    : "text-foreground/70 hover:text-foreground hover:bg-muted"
                 }`}
               >
                 {link.label}
@@ -70,16 +74,25 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setOpen(!open)}
-            data-ocid="nav.toggle"
-            aria-label="Toggle menu"
-          >
-            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </Button>
+          {/* CTA + Hamburger */}
+          <div className="flex items-center gap-2">
+            <Link
+              to="/contact"
+              className="hidden md:inline-flex items-center px-5 py-2 rounded-full text-sm font-semibold bg-primary text-white hover:bg-primary/90 transition-colors"
+              data-ocid="nav.primary_button"
+            >
+              Get Support
+            </Link>
+            <button
+              type="button"
+              className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-muted transition-colors"
+              onClick={() => setOpen(!open)}
+              data-ocid="nav.toggle"
+              aria-label="Toggle menu"
+            >
+              {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -99,15 +112,23 @@ export default function Navbar() {
                   to={link.to}
                   data-ocid="nav.link"
                   onClick={() => setOpen(false)}
-                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
                     isActive(link.to)
-                      ? "text-primary bg-primary/10"
-                      : "text-foreground hover:bg-primary/5"
+                      ? "text-primary bg-primary/10 font-semibold"
+                      : "text-foreground/70 hover:bg-muted"
                   }`}
                 >
                   {link.label}
                 </Link>
               ))}
+              <Link
+                to="/contact"
+                onClick={() => setOpen(false)}
+                className="mt-2 px-4 py-3 rounded-xl text-sm font-semibold bg-primary text-white text-center"
+                data-ocid="nav.primary_button"
+              >
+                Get Support
+              </Link>
             </nav>
           </motion.div>
         )}
